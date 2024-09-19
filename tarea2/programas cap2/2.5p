@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <math.h>
 
-  /* FunciÛn matem·tica.
-El programa obtiene el resultado de una funciÛn.
+  /* Funci√≥n matem√°tica.
+El programa obtiene el resultado de una funci√≥n.
 
 OP y T: variables de tipo entero.
 RES: variable de tipo real. */
@@ -11,8 +11,8 @@ void main(void)
 {
 int OP, T;
 float RES;
-printf(ìIngrese la opciÛn del c·lculo y el valor entero: ì);
-scanf(ì%d %dî, &OP, &T);
+printf(‚ÄúIngrese la opci√≥n del c√°lculo y el valor entero: ‚Äú);
+scanf(‚Äú%d %d‚Äù, &OP, &T);
 switch(OP)
 {
   case 1: RES = T / 5;
@@ -25,6 +25,6 @@ switch(OP)
     default: RES = 1;
     break;
 }
-    printf(ì\nResultado: %7.2fî, RES);
+    printf(‚Äú\nResultado: %7.2f‚Äù, RES);
 
 }
