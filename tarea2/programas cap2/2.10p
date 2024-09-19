@@ -7,13 +7,13 @@ NUM: variable de tipo entero. */
 void main(void)
 {
 int NUM;
-printf(“Ingrese el número: “);
-scanf(“%d”, &NUM);
+printf(â€œIngrese el nÃºmero: â€œ);
+scanf(â€œ%dâ€, &NUM);
 if(NUM == 0)
-    printf(“\nNulo”);
+    printf(â€œ\nNuloâ€);
 else
     if(pow (-1, NUM) > 0)
-    printf(“\nPar”);
+    printf(â€œ\nParâ€);
 else
-    printf(“\nImpar”);
+    printf(â€œ\nImparâ€);
 }
