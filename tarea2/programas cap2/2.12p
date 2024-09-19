@@ -3,7 +3,7 @@
 
 /* Igualdad de expresiones.
 El programa, al recibir como datos T, P y N, comprueba la igualdad de
-una expresión determinada.
+una expresiÃ³n determinada.
 
 T, P y N: variables de tipo entero. */
 
