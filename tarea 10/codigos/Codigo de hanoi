@@ -1,0 +1,114 @@
+#include <string.h> // Incluye la biblioteca para manejar cadenas de texto (aunque no se usa en este código)
+#include <stdio.h>  // Incluye la biblioteca para entrada y salida estándar, como printf y scanf
+#include <stdlib.h> // Incluye la biblioteca para funciones de manipulación de memoria, como malloc y system
+
+// Función que imprime el tablero de las torres de Hanoi
+void imprime(int *tab, int fil, int col, int ultNum) {
+    int f, c, i, esp; // Declaramos variables para las filas (f), columnas (c), índice de bucles (i), y los espacios (esp)
+
+    // Iteramos por las columnas (torres) desde la última hacia la primera
+    for (c = col - 1; c >= 0; c--) {
+        // Iteramos por las filas (niveles de las torres)
+        for (f = 0; f < fil; f++) {
+            esp = (ultNum - tab[col * f + c]) / 2; // Calcula los espacios para centrar cada disco en su torre
+
+            // Imprime los espacios a la izquierda del disco
+            for (i = 0; i < esp; i++)
+                printf(" "); // Imprime un espacio en blanco
+
+            // Imprime el número de asteriscos "*" correspondientes al tamaño del disco
+            for (i = 0; i < tab[col * f + c]; i++)
+                printf("*"); // Imprime el disco
+
+            // Imprime los espacios a la derecha del disco
+            for (i = 0; i < esp; i++)
+                printf(" "); // Imprime otro espacio en blanco
+
+            printf("\t"); // Imprime un tabulador para separar las torres
+        }
+        printf("\n"); // Salto de línea después de imprimir una fila completa
+    }
+}
+
+// Función que mueve un disco de una torre a otra
+void mueveDisco(int *tab, int fil, int col, int ultNum, int filOrig, int filDest) {
+    int cO = col - 1, cD = col - 1; // Inicializa las columnas de origen y destino
+
+    // Busca el disco más pequeño en la torre de origen (el primer disco no vacío)
+    while (cO >= 0 && tab[col * filOrig + cO] == 0)
+        cO--; // Decrementa la columna de origen hasta encontrar un disco
+
+    if (cO < 0) cO = 0; // Si no se encuentra un disco, se asegura de que el índice sea 0
+
+    // Busca el lugar vacío más alto en la torre de destino
+    while (cD >= 0 && tab[col * filDest + cD] == 0)
+        cD--; // Decrementa la columna de destino hasta encontrar el primer lugar vacío
+
+    // Mueve el disco desde la torre de origen a la de destino
+    tab[col * filDest + cD + 1] = tab[col * filOrig + cO]; // Coloca el disco en la posición más alta disponible
+    tab[col * filOrig + cO] = 0; // Borra el disco de la torre de origen
+
+    // Imprime el tablero después de realizar el movimiento
+    imprime(tab, fil, col, ultNum); // Llama a la función imprime para mostrar el tablero actualizado
+}
+
+// Función recursiva que resuelve el problema de las Torres de Hanoi
+void hanoi(int *tab, int fil, int col, int disc, int ultNum, int O, int A, int D) {
+    if (disc == 1) { // Caso base: si solo hay un disco, lo mueve directamente
+        system("cls"); // Limpia la pantalla antes de mostrar el movimiento
+        mueveDisco(tab, fil, col, ultNum, O, D); // Mueve el disco de la torre origen a la torre destino
+        delay(col <= 5 ? 4 : col <= 10 ? 3 : col <= 15 ? 2 : 1); // Pausa variable dependiendo del número de discos
+    } else {
+        // Llama recursivamente para mover `disc-1` discos de la torre de origen a la torre auxiliar
+        hanoi(tab, fil, col, disc - 1, ultNum, O, D, A);
+
+        system("cls"); // Limpia la pantalla antes de mostrar el movimiento
+        mueveDisco(tab, fil, col, ultNum, O, D); // Mueve el disco más grande de la torre de origen a la de destino
+        delay(col <= 5 ? 4 : col <= 10 ? 3 : col <= 15 ? 2 : 1); // Pausa variable dependiendo del número de discos
+
+        // Llama recursivamente para mover los discos restantes de la torre auxiliar a la torre destino
+        hanoi(tab, fil, col, disc - 1, ultNum, A, O, D);
+    }
+}
+
+// Función para generar un retardo
+void delay(int tiempo) {
+    int c, d; // Variables para los bucles
+
+    // Bucle que crea el retardo
+    while (tiempo >= 0) {
+        for (c = 1; c <= 10000; c++) // Primer bucle
+            for (d = 1; d <= 10000; d++) {} // Segundo bucle, sin hacer nada para crear retardo
+        tiempo--; // Disminuye el tiempo de retardo
+    }
+}
+
+// Función principal donde se inicia el juego
+main() {
+    int fil = 3, col, *tablero = NULL; // Declaración de variables: filas, columnas y un puntero al tablero
+    int f, c, disc = 1, ultNum; // Variables para las filas, columnas, disco y el número máximo de disco
+
+    printf("Indique el numero de discos: "); // Pide al usuario que ingrese el número de discos
+    scanf("%i", &col); // Lee el número de discos desde la entrada estándar
+
+    // Reserva memoria dinámica para el tablero, con `fil` filas y `col` columnas
+    tablero = (int *)malloc(sizeof(int) * fil * col);
+
+    // Inicializa el tablero colocando los discos en la primera torre
+    for (f = 0; f < fil; f++) // Itera sobre las filas
+        for (c = col - 1; c >= 0; c--) // Itera sobre las columnas (torres)
+            if (f == 0) { // Si es la primera fila
+                tablero[col * f + c] = disc; // Coloca el disco más grande en la primera torre
+                disc += 2; // Aumenta el tamaño del siguiente disco
+            } else
+                tablero[col * f + c] = 0; // Coloca 0 en las demás filas para representar espacios vacíos
+
+    ultNum = disc; // Guarda el número del disco más grande
+
+    system("cls"); // Limpia la pantalla
+    imprime(tablero, fil, col, ultNum); // Imprime el tablero inicial
+    delay(6); // Da un retardo para que el usuario vea el estado inicial
+
+    // Llama a la función `hanoi` para comenzar a resolver el problema de las Torres de Hanoi
+    hanoi(tablero, fil, col, col, ultNum, 0, 1, 2); // 0, 1 y 2 son las torres: origen, auxiliar y destino respectivamente
+}
