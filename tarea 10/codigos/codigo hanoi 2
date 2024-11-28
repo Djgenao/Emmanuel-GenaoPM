@@ -1,0 +1,55 @@
+#include <stdio.h>  // Incluye la biblioteca para manejar entrada y salida estándar (como printf y scanf)
+#include <stdlib.h> // Incluye la biblioteca para manejar funciones de sistema, como "system" para pausar el programa
+
+// Declaro la función recursiva "moverDiscos", que recibe la cantidad de discos y las tres torres involucradas
+void moverDiscos(int n, int origen, int destino, int aux);
+
+int main()
+{
+    // Declaro una variable para almacenar la cantidad de discos que el usuario desea utilizar
+    int cantDiscos;
+
+    // Solicito al usuario que ingrese la cantidad de discos
+    printf("Ingrese la cantidad de discos a utilizar: ");
+    // Leo el valor ingresado por el usuario y lo guardo en la variable cantDiscos
+    scanf("%d", &cantDiscos);
+
+    // Valido que el número de discos no sea mayor que 25 para evitar un volcado de memoria
+    // Esto es porque si el número de discos es alto, la recursión podría consumir demasiada memoria
+    if (cantDiscos > 25)
+    {
+        // Si el número de discos es mayor que 25, informamos al usuario y terminamos el programa
+        printf("\n\nPor favor, ingrese 5 discos o menos para su correcto funcionamiento\n\n\n");
+        system("PAUSE"); // Pausa la ejecución del programa para que el usuario pueda ver el mensaje
+        return 0; // Sale del programa si la validación no es correcta
+    }
+    printf("\n");
+
+    // Llamamos a la función recursiva "moverDiscos" para resolver el problema de las Torres de Hanoi
+    // Le pasamos los parámetros: la cantidad de discos, la torre origen (1), la torre destino (2), y la torre auxiliar (3)
+    moverDiscos(cantDiscos, 1, 2, 3);
+    printf("\n\n");
+    system("PAUSE"); // Pausa la ejecución para que el usuario pueda ver los pasos impresos en la consola
+
+    // Fin del programa, regresamos 0 indicando que todo ha terminado correctamente
+    return 0;
+}
+
+// Implementación de la función "moverDiscos"
+void moverDiscos(int n, int origen, int destino, int aux)
+{
+    // Si hay discos que mover (n > 0), realizamos los pasos recursivos
+    if (n > 0)
+    {
+        // Llamamos a la función recursiva para mover n-1 discos de la torre origen a la torre auxiliar
+        // Esto implica que primero movemos todos los discos que están sobre el disco más grande
+        moverDiscos(n - 1, origen, aux, destino);
+
+        // Imprimimos el movimiento del disco más grande desde la torre origen a la torre destino
+        printf("Muevo un disco de %d a %d\n", origen, destino);
+
+        // Llamamos a la función recursiva de nuevo para mover los n-1 discos que están en la torre auxiliar
+        // Ahora movemos esos discos a la torre destino
+        moverDiscos(n - 1, aux, destino, origen);
+    }
+}
