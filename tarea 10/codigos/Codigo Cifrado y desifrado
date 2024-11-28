@@ -1,0 +1,40 @@
+#include <stdio.h>  // Biblioteca estándar para funciones de entrada y salida (printf, scanf).
+#include <stdlib.h> // Biblioteca estándar para funciones como system().
+#include <string.h> // Biblioteca para funciones de manipulación de cadenas, como strlen.
+
+main() // Indica el inicio del programa.
+{
+    char frase[100]; // Declara un arreglo para almacenar la frase con un máximo de 100 caracteres.
+    int key;         // Variable para guardar la clave de cifrado o descifrado.
+    int i, salto = 0; // i es el índice para recorrer la frase; salto ajusta el desplazamiento.
+
+    while (1) // Bucle infinito para repetir el proceso.
+    {
+        system("cls"); // Limpia la consola antes de cada ejecución (función específica de Windows).
+        printf("Ingresa la frase a cifrar: "); // Pide al usuario ingresar la frase.
+        gets(frase); // Lee la frase completa ingresada por el usuario.
+                     // Nota: gets() es inseguro; puede reemplazarse con fgets() para evitar problemas.
+
+        // Solicitar la clave de cifrado.
+        do
+        {
+            printf("Inserisci la chiave di cifratura: "); // Pide al usuario ingresar la clave.
+            scanf("%d", &key); // Lee la clave desde la entrada.
+        } while (key < 1 || key > 10); // Repite si la clave no está entre 1 y 10.
+
+        printf("\n\n----------------------------------\nFrase cifrada:\n");
+
+        // Cifrar la frase carácter por carácter.
+        for (i = 0; i < strlen(frase); i++, salto = 0) // Recorre cada carácter de la frase.
+        {
+            if (frase[i] > 126 - key) // Si el desplazamiento supera el límite ASCII permitido (126):
+            {
+                salto = 95; // Ajusta el desplazamiento para "envolver" el carácter al inicio del rango.
+            }
+            printf("%c", frase[i] + key - salto); // Imprime el carácter cifrado.
+        }
+
+        printf("\n\n");
+        system("pause"); // Detiene la ejecución hasta que el usuario presione una tecla.
+    }
+}
